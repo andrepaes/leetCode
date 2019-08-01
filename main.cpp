@@ -75,6 +75,6 @@ void rotate(std::vector<int>& nums, int k) {
 
 int main() {
     std::vector<int> vet{1,2};
-    rotate(vet,3);
+    rotate(vet,2);
     return 0;
 }
