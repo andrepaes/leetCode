@@ -174,12 +174,53 @@ int movesToMakeZigzag(std::vector<int>& nums) {
     return stepsOdd < stepsEven ? stepsOdd : stepsEven;
 }
 
+struct ListNode {
+         int val;
+         ListNode *next;
+         ListNode(int x) : val(x), next(NULL) {}
+    };
+
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    int carry  = 0, sum = 0, overflow = 0;
+    ListNode *l3 = new ListNode(0);
+    ListNode *auxL3 = l3;
+    while (l1 != NULL || l2 != NULL){
+        if(l1 != NULL){
+            sum += l1->val;
+            l1 = l1->next;
+        }
+        if(l2 != NULL){
+            sum += l2->val;
+            l2 = l2->next;
+        }
+
+        carry = sum % 10;
+        overflow = sum / 10;
+        auxL3->val = carry;
+        if(l1 != NULL || l2 != NULL || overflow > 0){
+            auxL3->next = new ListNode(0);
+            auxL3 = auxL3->next;
+        }
+        sum = overflow;
+    }
+    if(overflow > 0){
+        auxL3->val = overflow;
+
+    }
+
+    return l3;
+}
 
 
 int main() {
-    int aa;
-    std::vector<int> vec{7,4,8,9,7,7,5,12};
-    aa = movesToMakeZigzag(vec);
-    std::cout << aa;
+    ListNode *l1 = new ListNode(2);
+    l1->next = new ListNode(4);
+    ListNode *aux1 = l1->next;
+    aux1->next = new ListNode(3);
+    ListNode *l2 = new ListNode(5);
+    l2->next = new ListNode(6);
+    aux1 = l2->next;
+    aux1->next = new ListNode(4);
+    ListNode *l3 = addTwoNumbers(l1,l2);
     return 0;
 }
