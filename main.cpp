@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <numeric>
 
-void print(std::vector<int> const &input)
+void print(std::vector<std::string> const &input)
 {
     for (int i = 0; i < input.size(); i++) {
         std::cout << input.at(i) << ' ';
@@ -71,10 +72,114 @@ void rotate(std::vector<int>& nums, int k) {
         nums = rotateVector;
 }
 
+std::vector<std::string> fizzBuzz(int n) {
+    std::vector<std::string> vec(n);
+    std::generate(vec.begin(), vec.end(), [] {
+        static int i = 1;
+        return std::to_string(i++);
+    });
+    if (n > 2){
+        for(int i = 2; i < n; i +=3){
+            if((i + 1) % 5 == 0)
+                vec[i] = "FizzBuzz";
+            else
+                vec[i] = "Fizz";
+        }
+        int a = 1;
+        for(int i = 4; i < n; i += 5){
+            if((i + 1) % 3 == 0)
+                vec[i] = "FizzBuzz";
+            else
+                vec[i] = "Buzz";
+        }
+    }
+    return vec;
+}
+
+int movesToMakeZigzag(std::vector<int>& nums) {
+    int stepsOdd = 0, stepsEven = 0;
+    std::vector<int> numsCopy = nums;
+
+    if(nums.size() == 2){
+        if(nums[0] == nums[1])
+            return 1;
+        else
+            return 0;
+    }
+
+    if(nums.size() == 3){
+        if(nums[0] <= nums[1]){
+            stepsEven += nums[1] - nums[0] + 1;
+            nums[1] = nums[0] - 1;
+        }
+        if(nums[2] <= nums[1]){
+            stepsEven += nums[1] - nums[2] + 1;
+            nums[1] = nums[2] - 1;
+        }
+        //ODD
+        if(numsCopy[1] <= numsCopy[0]){
+            stepsOdd += numsCopy[0] - numsCopy[1] + 1;
+        }
+        if(numsCopy[1] <= numsCopy[2]){
+            stepsOdd += numsCopy[2] - numsCopy[1] + 1;
+        }
+
+        return stepsEven < stepsOdd ? stepsEven : stepsOdd;
+    }
+
+    for(int i = 0; i < nums.size(); i += 2){
+        //EVEN
+        if(i == 0){
+            if(nums[i] <= nums[i + 1]){
+                stepsEven += nums[i + 1] - nums[i] + 1;
+                nums[i + 1] = nums[i] - 1;
+            }
+        }else{
+            if(nums[i] <= nums[i - 1]){
+                stepsEven += nums[i - 1] - nums[i] + 1;
+                nums[i - 1] = nums[i] - 1;
+            }
+            if(i < nums.size() - 1){
+                if(nums[i] <= nums[i + 1]){
+                    stepsEven += nums[i + 1] - nums[i] + 1;
+                    nums[i + 1] = nums[i] - 1;
+                }
+            }
+
+        }
+
+        //ODD
+        if(i == 0){
+            if(numsCopy[i] >= numsCopy[i + 1]){
+                stepsOdd += numsCopy[i] - numsCopy[i + 1] + 1;
+                numsCopy[i] = numsCopy[i + 1] - 1;
+            }
+        }else{
+            if(numsCopy[i] >= numsCopy[i - 1]){
+                stepsOdd += numsCopy[i] - numsCopy[i - 1] + 1;
+                numsCopy[i] = numsCopy[i - 1] - 1;
+            }
+            if(i < numsCopy.size() - 1){
+                if(numsCopy[i] >= numsCopy[i + 1]){
+                    stepsOdd += numsCopy[i] - numsCopy[i + 1] + 1;
+                    numsCopy[i] = numsCopy[i + 1] - 1;
+                }
+            }
+
+        }
+
+    }
+
+
+    return stepsOdd < stepsEven ? stepsOdd : stepsEven;
+}
+
 
 
 int main() {
-    std::vector<int> vet{1,2};
-    rotate(vet,2);
+    int aa;
+    std::vector<int> vec{7,4,8,9,7,7,5,12};
+    aa = movesToMakeZigzag(vec);
+    std::cout << aa;
     return 0;
 }
