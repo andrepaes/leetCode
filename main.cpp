@@ -211,16 +211,65 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
     return l3;
 }
 
+int lengthOfLongestSubstring(std::string s) {
+    int maxLength = 0;
+    std::unordered_map<char,int> hashMap;
+    std::unordered_map<char,int>::const_iterator element;
+
+    for (int i = 0; i < s.size(); i++) {
+        element = hashMap.find(s[i]);
+        if (element == hashMap.end()){
+            hashMap.insert({s[i], i});
+        }
+        else {
+            int index = element->second + 1;
+            hashMap.clear();
+            hashMap.insert({s[index], index});
+            i = index;
+        }
+        if(hashMap.size() > maxLength)
+            maxLength = hashMap.size();
+    }
+    return maxLength;
+}
+
+double findMedianSortedArrays(std::vector<int>& nums1, std::vector<int>& nums2){
+    unsigned long mid = ((nums1.size() + nums2.size()) / 2);
+    bool isOdd = (nums1.size() + nums2.size()) % 2 == 1;
+    int lastNumber;
+    if(nums1.empty()){
+        return isOdd ? nums2[mid] : (double)(nums2[mid - 1] + nums2[mid]) / 2;
+    }
+    if(nums2.empty()){
+        return isOdd ? nums1[mid] : (double)(nums1[mid - 1] + nums1[mid]) / 2;
+    }
+    for(int i = 0, j = 0; (i + j) <= mid;){
+        if(j >= nums2.size() || (i < nums1.size() && nums1[i] <= nums2[j])){
+            if(isOdd && (i + j) == mid)
+                return nums1[i];
+            if(!isOdd && (i + j) == mid)
+                return (double) (lastNumber + nums1[i]) / 2;
+            lastNumber = nums1[i];
+            i++;
+        }
+        else{
+            if(isOdd && (i + j) == mid)
+                return nums2[j];
+            if(!isOdd && (i + j) == mid)
+                return (double) (lastNumber + nums2[j]) / 2;
+            lastNumber = nums2[j];
+            j++;
+        }
+
+    }
+    return 0;
+}
+
+
 
 int main() {
-    ListNode *l1 = new ListNode(2);
-    l1->next = new ListNode(4);
-    ListNode *aux1 = l1->next;
-    aux1->next = new ListNode(3);
-    ListNode *l2 = new ListNode(5);
-    l2->next = new ListNode(6);
-    aux1 = l2->next;
-    aux1->next = new ListNode(4);
-    ListNode *l3 = addTwoNumbers(l1,l2);
+    std::vector<int> list1{100001};
+    std::vector<int> list2{100000};
+    std::cout << findMedianSortedArrays(list1, list2);
     return 0;
 }
