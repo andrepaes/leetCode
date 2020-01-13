@@ -265,11 +265,54 @@ double findMedianSortedArrays(std::vector<int>& nums1, std::vector<int>& nums2){
     return 0;
 }
 
+std::vector<int> findSubstring(std::string s, std::vector<std::string>& words) {
+    std::string concatenatedString, reverseConcatenatedString, aux;
+    std::vector<int> result;
+    for (const auto & word : words) {
+        concatenatedString += word;
+        aux = word;
+        reverseConcatenatedString = aux.append(reverseConcatenatedString);
+    }
+    for (int i = 0; (i + concatenatedString.size()) <= s.size(); ++i) {
+        aux = s.substr(i, concatenatedString.size());
+        if((concatenatedString == aux) || (reverseConcatenatedString == aux)){
+            result.push_back(i);
+        }
+    }
+    return result;
+}
 
+std::string longestPalindrome(std::string s){
+    int stringLength = s.size(), bestLen = 0;
+    std::string bestString;
+    for(int mid = 0; mid < stringLength; mid++){
+        for(int cursor = 0; cursor <= mid; cursor++){
+            if(s[mid - cursor] != s[mid + cursor])
+                break;
+            int len = 2 * cursor + 1;
+            if(len > bestLen){
+                bestLen = len;
+                bestString = s.substr(mid - cursor, len);
+            }
+        }
+    }
+    for(int mid = 0; mid < (stringLength - 1); mid++){
+        for(int cursor = 1; (mid + cursor) < stringLength && (mid  - cursor + 1) >= 0; cursor++){
+            if(s[mid - cursor + 1] != s[mid + cursor])
+                break;
+            int length = cursor * 2;
+            if(bestLen < length){
+                bestLen = length;
+                bestString = s.substr(mid - cursor + 1, length);
+            }
+        }
+    }
+
+    return bestString;
+}
 
 int main() {
-    std::vector<int> list1{100001};
-    std::vector<int> list2{100000};
-    std::cout << findMedianSortedArrays(list1, list2);
+    std::string teste = "bb";
+    longestPalindrome(teste);
     return 0;
 }
