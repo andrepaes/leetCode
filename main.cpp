@@ -311,8 +311,52 @@ std::string longestPalindrome(std::string s){
     return bestString;
 }
 
+int singleNumber(std::vector<int>& nums) {
+    int x = 0;
+    for (int a : nums) {
+        x ^= a;
+        std::cout << x << ' ';
+    }
+    return x;
+}
+
+
+std::vector<std::vector<std::string>> groupAnagrams(std::vector<std::string>& strs) {
+    std::unordered_map<std::string, std::vector<std::string>> map;
+    for(std::string str : strs){
+        std::string s2 = str;
+        sort(s2.begin(), s2.end());
+        map[s2].push_back(str);
+    }
+    std::vector<std::vector<std::string>> aux;
+    for (auto pp : map){
+        aux.push_back(pp.second);
+    }
+    return aux;
+}
+
+
+int countElements(std::vector<int>& arr) {
+    std::unordered_map<int, int> map;
+    for(int i : arr){
+        if (map.count(i) == 0){
+            map[i] = 1;
+        } else{
+            map[i]++;
+        }
+    }
+    int count = 0;
+
+    for(auto elem : map){
+        if(map.count(elem.first + 1) > 0){
+            count += elem.second;
+        }
+    }
+    return count;
+}
+
 int main() {
-    std::string teste = "bb";
-    longestPalindrome(teste);
+    std::vector<int> nums {1,2,2,3};
+    std::cout << countElements(nums);
     return 0;
 }
